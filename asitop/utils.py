@@ -6,7 +6,7 @@ from subprocess import PIPE
 
 import psutil
 
-from .parsers import *
+from asitop.parsers import parse_cpu_metrics, parse_gpu_metrics, parse_thermal_pressure
 
 
 def parse_powermetrics(path="/tmp/asitop_powermetrics", timecode="0"):
@@ -112,10 +112,10 @@ def get_cpu_info():
     cpu_info_lines = cpu_info.split("\n")
     data_fields = ["machdep.cpu.brand_string", "machdep.cpu.core_count"]
     cpu_info_dict = {}
-    for l in cpu_info_lines:
+    for line in cpu_info_lines:
         for h in data_fields:
-            if h in l:
-                value = l.split(":")[1].strip()
+            if h in line:
+                value = line.split(":")[1].strip()
                 cpu_info_dict[h] = value
     return cpu_info_dict
 
@@ -125,10 +125,10 @@ def get_core_counts():
     cores_info_lines = cores_info.split("\n")
     data_fields = ["hw.perflevel0.logicalcpu", "hw.perflevel1.logicalcpu"]
     cores_info_dict = {}
-    for l in cores_info_lines:
+    for line in cores_info_lines:
         for h in data_fields:
-            if h in l:
-                value = int(l.split(":")[1].strip())
+            if h in line:
+                value = int(line.split(":")[1].strip())
                 cores_info_dict[h] = value
     return cores_info_dict
 
@@ -139,7 +139,7 @@ def get_gpu_cores():
             "system_profiler -detailLevel basic SPDisplaysDataType | grep 'Total Number of Cores'"
         ).read()
         cores = int(cores.split(": ")[-1])
-    except:
+    except KeyError:
         cores = "?"
     return cores
 
@@ -150,7 +150,7 @@ def get_soc_info():
     try:
         e_core_count = core_counts_dict["hw.perflevel1.logicalcpu"]
         p_core_count = core_counts_dict["hw.perflevel0.logicalcpu"]
-    except:
+    except KeyError:
         e_core_count = "?"
         p_core_count = "?"
     soc_info = {

@@ -4,7 +4,13 @@ from collections import deque
 
 from dashing import HChart, HGauge, HSplit, VGauge, VSplit
 
-from .utils import *
+from asitop.utils import (
+    clear_console,
+    get_ram_metrics_dict,
+    get_soc_info,
+    parse_powermetrics,
+    run_powermetrics_process,
+)
 
 parser = argparse.ArgumentParser(
     description="asitop: Performance monitoring CLI tool for Apple Silicon"
