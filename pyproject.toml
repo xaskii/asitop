@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asitop"
+version = "0.0.22"
+description = "Performance monitoring CLI tool for Apple Silicon"
+readme = "README.md"
+authors = [{ name = "Timothy Liu", email = "tlkh.xms@gmail.com" }]
+license = "MIT"
+keywords = ["asitop"]
+
+dependencies = ["dashing", "psutil"]
+requires-python = ">=3.6"
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS",
+]
+
+[project.urls]
+Homepage = "https://github.com/tlkh/asitop"
+
+[project.scripts]
+asitop = "asitop.asitop:main"
+
+[tool.setuptools]
+packages = ["asitop"]
+zip-safe = false
